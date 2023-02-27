@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'features/selectOperator/select_operator.dart';
+import 'features/selectOperator/page/select_operator.dart';
 
 void main() {
   runApp(const MyApp());

@@ -23,7 +23,7 @@ class MyConfirmButton extends StatelessWidget {
       child: Center(
         child: Text(
           txt,
-          style: txtColorWhite ?textTheme.bodyText2 :textTheme.bodyText2,
+          style: txtColorWhite ?textThemeWhite.bodyText2 :textThemeWhite.bodyText2,
         ),
       ),
     );

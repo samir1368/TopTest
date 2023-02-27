@@ -7,7 +7,8 @@ import 'package:top/core/utils/app_size.dart';
 import '../../theme/text_theme.dart';
 
 class TextFieldButton extends StatefulWidget {
-  const TextFieldButton({Key? key}) : super(key: key);
+  final ValueChanged<bool> showBottomSheet;
+  const TextFieldButton({Key? key,required this.showBottomSheet}) : super(key: key);
 
   @override
   State<TextFieldButton> createState() => _TextFieldButtonState();
@@ -52,13 +53,16 @@ class _TextFieldButtonState extends State<TextFieldButton> {
 
               //  suffixText:  "تومان"  ,
               //    suffixStyle: textThemePurple.caption,
-              suffixIcon: Container(
+              suffixIcon: IconButton(
                 padding: EdgeInsets.all(10),
-                child: SvgPicture.asset(
+                icon: SvgPicture.asset(
                   "assets/contact_icon.svg",
                   width: 20,
                   height: 20,
                 ),
+                onPressed: (){
+                  widget.showBottomSheet(true);
+                },
               ),
 
               counterText: '', // to hide length counter
