@@ -31,6 +31,7 @@ class SelectOperator extends StatefulWidget {
     @override
     Widget build(BuildContext context) {
       return Scaffold(
+        backgroundColor: AppColors.white,
         appBar: myAppbar(),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
