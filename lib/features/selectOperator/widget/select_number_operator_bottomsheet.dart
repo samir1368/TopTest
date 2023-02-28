@@ -35,7 +35,9 @@ class SelectNumberOperatorBottomSheet extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Row(children: [
-                    IconButton(onPressed: (){}, icon: SvgPicture.asset("assets/close_icon.svg",width: 30,)),
+                    IconButton(onPressed: (){
+                      showBottomSheet(false);
+                    }, icon: SvgPicture.asset("assets/close_icon.svg",width: 30,)),
                     Spacer(),
                     Text("انتخاب شماره",style: textTheme.bodyText2,),
                     Spacer(),
@@ -51,51 +53,53 @@ class SelectNumberOperatorBottomSheet extends StatelessWidget {
                     child: Container(
                         height: 70,
                         child: Row(children: [
+                          Expanded(
+                              flex:1,
+                              child:  SvgPicture.asset("assets/next_arrow.svg")),
+                          Expanded(
+                              flex:5,
+                              child:  Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("انتخاب مخاطبین"),
+                                  Text("ادامه با لیست مخاطب ها")
+                                ],
+                              )),
 
-                          Text("data")],)),),
+                          Expanded(
+                              flex:1,
+                              child:  SvgPicture.asset("assets/add_contact.svg")),
+                        ],)),),
                     SizedBox(height: 8,),
-                    Card(   margin: EdgeInsets.all(10),
+                    Align(alignment: Alignment.centerRight,child:   Text("لیست مخاطبین",),),
+                    SizedBox(height: 8,),
+
+                  ],),
+                  Expanded(
+
+                    child: Card(   margin: EdgeInsets.all(10),
                       color: Colors.green[100],
                       shadowColor: Colors.blueGrey,
+
                       elevation: 10,
-                      child: Column(
-                        children: [Container(
-                            padding: EdgeInsets.all(8),
-                            child: Row(children: [Text("data")],)),
-                          Container(
-                            width: double.infinity,
-                            margin: const EdgeInsets.all(10 ),
-                            child: const Divider(
-                              thickness: 1, color: AppColors.gray,),
-                          ),
-                          Container(
-                              padding: EdgeInsets.all(8),
-                              child: Row(children: [Text("data")],)),
-                          Container(
-                            width: double.infinity,
-                            margin: const EdgeInsets.all(10 ),
-                            child: const Divider(
-                              thickness: 1, color: AppColors.gray,),
+                     child:   ListView.separated(
+                       itemCount: 3,
+                       itemBuilder: (context, index) {
+                         return _buildItems();
+                       },
+                       //   separatorBuilder: (context, index) => const SizedBox(height: 20),
+                       separatorBuilder: (context, index) {
+                         return Divider(
+                           indent: 15,
+                           endIndent: 15,
+                           color: AppColors.gray,
+                         );
+                       },
 
-                          ),
-                          Container(
-                              padding: EdgeInsets.all(8),
-                              child: Row(children: [Text("data")],)),
-                        ],
-                      ),),
-                  ],),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: TextButton(
-                        onPressed: () {
-                          showBottomSheet(false);
+                     ),
 
-                        },
-                        child: Text(
-                          "  MyStrings.free",
-                          style: textThemeWhite.subtitle1,
-                          textDirection: TextDirection.rtl,
-                        )),
+                      ),
                   ),
 
                 ],
@@ -109,9 +113,26 @@ class SelectNumberOperatorBottomSheet extends StatelessWidget {
   }
    _buildItems(){
     return   Container(
-        padding: EdgeInsets.all(8),
-        child: Row(children: [
 
-          Text("data")],));
+        padding: EdgeInsets.all(8),
+     child:Row(children: [
+      Expanded(
+          flex:1,
+          child:  SvgPicture.asset("assets/next_arrow.svg")),
+      Expanded(
+          flex:5,
+          child:  Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("انتخاب مخاطبین"),
+              Text("ادامه با لیست مخاطب ها")
+            ],
+          )),
+
+      Expanded(
+          flex:1,
+          child:  SvgPicture.asset("assets/add_contact.svg")),
+    ],));
    }
 }
