@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:top/core/utils/app_colors.dart';
+import 'package:top/core/utils/app_strings.dart';
 import 'package:top/core/widget/appbar.dart';
 import 'package:top/core/widget/textfield_button.dart';
 import 'package:top/features/billPage/page/bill_page.dart';
@@ -18,8 +19,6 @@ class SelectChargePage extends StatefulWidget {
 
 class SelectChargePageState extends State<SelectChargePage> {
   late final List<int> _chargeData = [];
-
-
   int _selectedIndex = -1;
 
   @override
@@ -36,99 +35,111 @@ class SelectChargePageState extends State<SelectChargePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: myAppbar(),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: double.infinity,
-        padding: EdgeInsets.all(8),
-        child: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            child: Column(
-
-              children: [
-                Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      "انتخاب مبلغ شارژ",
-                      style: textTheme.bodyText2,
-                      textDirection: TextDirection.rtl,
-                    )),
-                const SizedBox(
-                  height: 8,
-                ),
-                Card(
-                  margin: EdgeInsets.all(10),
-                  color: Colors.green[100],
-                  shadowColor: Colors.blueGrey,
-                  elevation: 10,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
+      resizeToAvoidBottomInset: false,
+      appBar: myAppbar(context, AppStrings.buy, "assets/buy_credit_icon.svg"),
+      body: Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          SingleChildScrollView(
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              width: double.infinity,
+              color: AppColors.main_bg,
+              alignment: Alignment.topCenter,
+              padding: EdgeInsets.all(10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      _phoneNumber(),
-                      Container(
-                        width: double.infinity,
-                        margin: const EdgeInsets.all(10),
-                        child: const Divider(
-                          thickness: 1,
-                          color: AppColors.gray,
-                        ),
-                      ),
-                      Directionality(
-                        textDirection: TextDirection.rtl,
-                        child: StaggeredGrid.count(
-                          crossAxisCount: 3,
-                          mainAxisSpacing: 3,
-                          crossAxisSpacing: 3,
-                          children: [
-                            ..._chargeData.map((model) {
-                              return _buildWidgetItem(
-                                  model, context, _chargeData.indexOf(model));
-                            }),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
                       Text(
-                        "مبلغ دلخواه",
+                        AppStrings.selectPayCharge,
                         style: textTheme.bodyText2,
                         textDirection: TextDirection.rtl,
                       ),
-                      TextFieldButton(showBottomSheet: (_) {}),
+                      Card(
+                        margin: EdgeInsets.all(10),
+                        color: AppColors.white,
+                        shadowColor: Colors.blueGrey,
+                        elevation: 8,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              _phoneNumber(),
+                              Container(
+                                width: double.infinity,
+                                margin: const EdgeInsets.all(10),
+                                child: const Divider(
+                                  thickness: 1,
+                                  color: AppColors.light_gray,
+                                ),
+                              ),
+                              Directionality(
+                                textDirection: TextDirection.rtl,
+                                child: StaggeredGrid.count(
+                                  crossAxisCount: 3,
+                                  mainAxisSpacing: 3,
+                                  crossAxisSpacing: 3,
+                                  children: [
+                                    ..._chargeData.map((model) {
+                                      return _buildWidgetItem(model, context,
+                                          _chargeData.indexOf(model));
+                                    }),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                AppStrings.desire_amount,
+                                style: textThemeBlack.bodyText2,
+                                textDirection: TextDirection.rtl,
+                              ),
+                              TextFieldButton(
+                                showBottomSheet: (_) {},
+                                showSuffix: false,
+                                hintMessage: AppStrings.amount,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-                ),
-
-                Expanded(
-                  child: Container(
-                    height: AppSize.heightConfirmButton,
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: MyConfirmButton(
-                        txt: "تایید و ادامه",
-                        color: AppColors.lightOrange,
-                        txtColorWhite: true,
-                        clickConfirm: _clickConfirm,
-                      ),
-                    ),
-                  ),
-                ),
-
-              ],
+                ],
+              ),
             ),
           ),
-        ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              margin: EdgeInsets.all(15),
+              height: AppSize.heightConfirmButton,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: MyConfirmButton(
+                  txt: AppStrings.confirm,
+                  color: AppColors.lightOrange,
+                  txtColorWhite: true,
+                  clickConfirm: _clickConfirm,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
   void _clickConfirm() {
     Navigator.of(context).push(PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          BillPage(),
+      pageBuilder: (context, animation, secondaryAnimation) => BillPage(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return child;
       },
@@ -151,18 +162,18 @@ class SelectChargePageState extends State<SelectChargePage> {
           padding: EdgeInsets.all(8),
           decoration: _selectedIndex == index
               ? BoxDecoration(
-                  color: AppColors.blue,
+                  color: AppColors.bg_orange,
                   borderRadius: BorderRadius.all(
                     Radius.circular(10),
                   ),
                   border: Border.all(
-                    color: AppColors.dark_blue,
+                    color: AppColors.lightOrange,
                     width: 1,
                   ),
                 )
               : BoxDecoration(
                   color: AppColors.white,
-                  borderRadius: BorderRadius.all(
+                  borderRadius: const BorderRadius.all(
                     Radius.circular(10),
                   ),
                   border: Border.all(
@@ -172,7 +183,12 @@ class SelectChargePageState extends State<SelectChargePage> {
                 ),
           child: Align(
               alignment: Alignment.centerRight,
-              child: Text(chargeModel.toString() + " ریال")),
+              child: Text(
+                chargeModel.toString() + " ریال",
+                style: _selectedIndex == index
+                    ? textThemeOrange.bodyText2
+                    : textTheme.bodyText2,
+              )),
         ),
       ),
     );
@@ -189,12 +205,18 @@ class SelectChargePageState extends State<SelectChargePage> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("انتخاب مخاطبین"),
-                    Text("ادامه با لیست مخاطب ها")
+                    Text(
+                      "09124168652",
+                      style: textThemeBlack.bodyText2,
+                    ),
+                    Text(
+                      AppStrings.mci,
+                      style: textTheme.bodyText2,
+                    )
                   ],
                 )),
             Expanded(
-                flex: 1, child: SvgPicture.asset("assets/add_contact.svg")),
+                flex: 1, child: SvgPicture.asset("assets/mci_with_bg.svg")),
           ],
         ));
   }

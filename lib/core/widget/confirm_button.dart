@@ -10,13 +10,12 @@ class MyConfirmButton extends StatelessWidget {
   final String txt;
   final Color color;
   final bool txtColorWhite;
-    MyConfirmButton({Key? key,required this.txt,required this.color,required this.txtColorWhite,required this.clickConfirm}) : super(key: key);
+    const MyConfirmButton({Key? key,required this.txt,required this.color,required this.txtColorWhite,required this.clickConfirm}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-
         clickConfirm();
       },
       child: Container(

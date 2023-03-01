@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:top/core/utils/app_colors.dart';
+import 'package:top/core/utils/app_strings.dart';
 import 'package:top/core/widget/appbar.dart';
 import 'package:top/core/widget/textfield_button.dart';
 import 'package:top/theme/text_theme.dart';
 import 'package:top/core/utils/app_size.dart';
 import '../../../core/widget/confirm_button.dart';
 
+/// This class is a StatefulWidget that shows information after paying your charge
 class BillPage extends StatefulWidget {
   const BillPage({Key? key}) : super(key: key);
 
@@ -17,243 +19,295 @@ class BillPage extends StatefulWidget {
 }
 
 class BillPageState extends State<BillPage> {
-  late final List<int> _chargeData = [];
-
-  int _selectedIndex = -1;
-
+  bool _switchValue = false;
   @override
   void initState() {
     super.initState();
-    _chargeData.add(2100);
-    _chargeData.add(2500);
-    _chargeData.add(6000);
-    _chargeData.add(7000);
-    _chargeData.add(1000);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: myAppbar(),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: double.infinity,
-        padding: EdgeInsets.all(8),
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
+      backgroundColor: AppColors.main_bg,
+      resizeToAvoidBottomInset: false,
+      appBar: myAppbar(context, AppStrings.buy_mci, "assets/mci_light.svg"),
+      body: Stack(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height,
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        "صورتحساب",
+                  Column(
+                    children: [
+                      Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            AppStrings.bill,
+                            style: textTheme.bodyText2,
+                            textDirection: TextDirection.rtl,
+                          )),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Card(
+                        color: AppColors.white,
+                        shadowColor: Colors.blueGrey,
+                        elevation: 8,
+                        shape: const RoundedRectangleBorder(
+                            side: BorderSide(color: AppColors.white, width: 1),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                            )),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            _buildItem(AppStrings.phoneNumber, "0912416852"),
+                            Container(
+                              width: double.infinity,
+                              margin: const EdgeInsets.only(left: 8, right: 8),
+                              child: const Divider(
+                                thickness: 1,
+                                color: AppColors.light_gray,
+                              ),
+                            ),
+                            _buildItem(AppStrings.amount, "2100ریال"),
+                            Container(
+                              width: double.infinity,
+                              margin: const EdgeInsets.only(left: 8, right: 8),
+                              child: const Divider(
+                                thickness: 1,
+                                color: AppColors.light_gray,
+                              ),
+                            ),
+                            _buildItemAmount(
+                                AppStrings.finalAmount, "23 هزار ریال"),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Card(
+                          color: AppColors.white,
+                          shadowColor: Colors.blueGrey,
+                          elevation: 8,
+                          shape: const RoundedRectangleBorder(
+                              side:
+                                  BorderSide(color: AppColors.white, width: 1),
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10),
+                              )),
+                          child: _buildItemSwitch()),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        AppStrings.selectPayWay,
                         style: textTheme.bodyText2,
                         textDirection: TextDirection.rtl,
-                      )),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Card(
-                    margin: EdgeInsets.all(10),
-                    color: Colors.green[100],
-                    shadowColor: Colors.blueGrey,
-                    elevation: 10,
-                    shape: RoundedRectangleBorder(
-                        side: BorderSide(color: AppColors.darkOrange, width: 1),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30),
-                        )),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        _buildItem(),
-                        Container(
+                      ),
+                      Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          padding: const EdgeInsets.all(5),
+                          decoration: const BoxDecoration(
+                              color: AppColors.light_gray,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0))),
                           width: double.infinity,
-                          margin: const EdgeInsets.all(10),
-                          child: const Divider(
-                            thickness: 1,
-                            color: AppColors.gray,
-                          ),
-                        ),
-                        _buildItem(),
-                        Container(
-                          width: double.infinity,
-                          margin: const EdgeInsets.all(10),
-                          child: const Divider(
-                            thickness: 1,
-                            color: AppColors.gray,
-                          ),
-                        ),
-                        _buildItem(),
-                      ],
-                    ),
-                  ),
-                  Card(
-                      margin: EdgeInsets.all(10),
-                      color: Colors.green[100],
-                      shadowColor: Colors.blueGrey,
-                      elevation: 10,
-                      shape: RoundedRectangleBorder(
-                          side:
-                              BorderSide(color: AppColors.darkOrange, width: 1),
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(30),
-                            bottomRight: Radius.circular(30),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    height: 50,
+                                    child: Center(
+                                        child: Text(
+                                     AppStrings.wallet,
+                                      style: textTheme.bodyText2,
+                                    )),
+                                  )),
+                              const SizedBox(
+                                width: 2,
+                              ),
+                              Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    height: 50,
+                                    decoration: const BoxDecoration(
+                                        color: AppColors.white,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10.0))),
+                                    child: Center(
+                                      child: Text(
+                                       AppStrings.card,
+                                        style: textThemeOrange.bodyText2,
+                                      ),
+                                    ),
+                                  ))
+                            ],
                           )),
-                      child: _buildItemSwitch()),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Text(
+                        AppStrings.bill,
+                        style: textTheme.bodyText2,
+                        textDirection: TextDirection.rtl,
+                      ),
+                      Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          padding: const EdgeInsets.all(5),
+                          decoration: const BoxDecoration(
+                              color: AppColors.white,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0))),
+                          width: double.infinity,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                  flex: 1,
+                                  child: SizedBox(
+                                    height: 50,
+                                    child: Center(
+                                        child: RotatedBox(
+                                            quarterTurns: 3,
+                                            child: SvgPicture.asset(
+                                                "assets/next_arrow.svg"))),
+                                  )),
+                              Expanded(
+                                  flex: 4,
+                                  child: SizedBox(
+                                    height: 50,
+                                    child: Center(
+                                        child: Text(
+                                      AppStrings.select,
+                                      style: textTheme.bodyText2,
+                                    )),
+                                  )),
+                              Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    height: 50,
+                                    decoration: const BoxDecoration(
+                                        color: AppColors.bg_orange,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10.0))),
+                                    child: Stack(
+                                      children: [
+                                        Center(
+                                            child: SvgPicture.asset(
+                                                "assets/bank_logo.svg")),
+                                      ],
+                                    ),
+                                  ))
+                            ],
+                          )),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      SizedBox(
+                        height: AppSize.heightConfirmButton,
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: MyConfirmButton(
+                            txt: AppStrings.payByCard,
+                            color: AppColors.bg_unselected,
+                            txtColorWhite: true,
+                            clickConfirm: _clickConfirm,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    "صورتحساب",
-                    style: textTheme.bodyText2,
-                    textDirection: TextDirection.rtl,
-                  ),
-                  Container(
-                      margin: EdgeInsets.only(top: 10),
-                      padding: EdgeInsets.all(5),
-                      decoration: const BoxDecoration(
-                          color: AppColors.background_bottomsheet,
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
-                      width: double.infinity,
-                      child: Row(
-                        children: [
-                          Expanded(
-                              flex: 1,
-                              child: Container(
-                                height: 50,
-
-                                child: Center(child: Text("sami")),
-                              )),
-                          SizedBox(
-                            width: 2,
-                          ),
-                          Expanded(
-                              flex: 1,
-                              child: Container(
-                                height: 50,
-                                decoration: const BoxDecoration(
-                                    color: AppColors.blue,
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(10.0))),
-                                child: Center(child: Text("ffdd")),
-                              ))
-                        ],
-                      )),
-                  Text(
-                    "صورتحساب",
-                    style: textTheme.bodyText2,
-                    textDirection: TextDirection.rtl,
-                  ),
-                  Container(
-                      margin: EdgeInsets.only(top: 10),
-                      padding: EdgeInsets.all(5),
-                      decoration: const BoxDecoration(
-                          color: AppColors.background_bottomsheet,
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(10.0))),
-                      width: double.infinity,
-                      child: Row(
-                        children: [
-                          Expanded(
-                              flex:1,
-                              child: Container(
-                                height: 50,
-
-                                child: Center(child: Text("sami")),
-                              )),
-                          Expanded(
-                              flex: 4,
-                              child: Container(
-                                height: 50,
-
-                                child: Center(child: Text("انتخاب کنید")),
-                              )),
-                          Expanded(
-                              flex: 1,
-                              child: Container(
-                                height: 50,
-                                decoration: const BoxDecoration(
-                                    color: AppColors.blue,
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(10.0))),
-                                child: Center(child: Text("ffdd")),
-                              ))
-                        ],
-                      )),
-                    SizedBox(height: 10,),
-                  Container(
-                    height: AppSize.heightConfirmButton,
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: MyConfirmButton(
-                        txt: "پرداخت با کارت",
-                        color: AppColors.lightOrange,
-                        txtColorWhite: true,
-                        clickConfirm: _clickConfirm,
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
 
   void _clickConfirm() {
     Navigator.of(context).push(PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => BillPage(),
+      pageBuilder: (context, animation, secondaryAnimation) => const BillPage(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return child;
       },
     ));
   }
 
-  _buildItem() {
+  _buildItem(String title, String message) {
     return Container(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(10),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("انتخاب مخاطبین"),
-            Text("09124168652 "),
+            Text(
+              message,
+              style: textTheme.bodyText2,
+            ),
+            Text(
+              title,
+              style: textTheme.bodyText2,
+            ),
+          ],
+        ));
+  }
+
+  _buildItemAmount(String title, String message) {
+    return Container(
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              message,
+              style: textThemeBlack.bodyText2,
+            ),
+            Text(
+              title,
+              style: textThemeBlack.bodyText2,
+            ),
           ],
         ));
   }
 
   _buildItemSwitch() {
     return Container(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("انتخاب مخاطبین"),
             Transform.scale(
-              scale: 0.6,
+              scale: 0.7,
               child: CupertinoSwitch(
                 activeColor: AppColors.darkOrange,
-                value: true,
+                value: _switchValue,
                 onChanged: (bool value) {
                   setState(() {
-                    //  _switchValuePremium = value;
+                    _switchValue = !_switchValue;
                   });
                 },
               ),
-            )
+            ),
+            Text(
+            AppStrings.saveMobilePhone,
+              style: textTheme.bodyText2,
+            ),
           ],
         ));
   }
