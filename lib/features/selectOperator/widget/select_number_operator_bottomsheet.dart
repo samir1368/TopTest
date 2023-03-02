@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
+import '../../../controller/dataController.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_strings.dart';
 import '../../../theme/text_theme.dart';
@@ -8,10 +10,10 @@ import '../../../theme/text_theme.dart';
 class SelectNumberOperatorBottomSheet extends StatelessWidget {
   final ValueChanged<bool> showBottomSheet;
 
-  const SelectNumberOperatorBottomSheet(
+   SelectNumberOperatorBottomSheet(
       {Key? key, required this.showBottomSheet})
       : super(key: key);
-
+  final _controller = Get.put(DataController());
   @override
   Widget build(BuildContext context) {
     return BottomSheet(
@@ -170,6 +172,9 @@ class SelectNumberOperatorBottomSheet extends StatelessWidget {
     return InkWell(
       onTap: () {
         showBottomSheet(false);
+        _controller.operator.value = operator;
+        _controller.phoneNumber.value = phoneNumber;
+
       },
       child: Container(
           padding: EdgeInsets.all(8),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:top/core/utils/app_colors.dart';
 import 'package:top/core/utils/app_strings.dart';
 import 'package:top/core/widget/appbar.dart';
@@ -8,7 +9,10 @@ import 'package:top/core/widget/textfield_button.dart';
 import 'package:top/features/billPage/page/bill_page.dart';
 import 'package:top/theme/text_theme.dart';
 import 'package:top/core/utils/app_size.dart';
+import '../../../controller/dataController.dart';
 import '../../../core/widget/confirm_button.dart';
+import '../model/choose_operator_icon.dart';
+import '../model/convert_digit_to_letter.dart';
 
 class SelectChargePage extends StatefulWidget {
   const SelectChargePage({Key? key}) : super(key: key);
@@ -20,7 +24,9 @@ class SelectChargePage extends StatefulWidget {
 class SelectChargePageState extends State<SelectChargePage> {
   late final List<int> _chargeData = [];
   int _selectedIndex = -1;
-
+  final _controller = Get.put(DataController());
+  String operatorIcon = "";
+  String _favPrice= "";
   @override
   void initState() {
     super.initState();
@@ -29,6 +35,8 @@ class SelectChargePageState extends State<SelectChargePage> {
     _chargeData.add(6000);
     _chargeData.add(7000);
     _chargeData.add(1000);
+    operatorIcon =
+        ChooseOperatorIcon(Get.find<DataController>().phoneNumber.value);
   }
 
   @override
@@ -102,10 +110,23 @@ class SelectChargePageState extends State<SelectChargePage> {
                                 textDirection: TextDirection.rtl,
                               ),
                               TextFieldButton(
-                                showBottomSheet: (_) {},
+                                showBottomSheet: (_) {
+                                  setState((){
+                                    _favPrice = Get.find<DataController>().price.value;
+                                  });
+
+                                },
                                 showSuffix: false,
                                 hintMessage: AppStrings.amount,
                               ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Center(
+                                child: Text(
+                                    _favPrice.length>1? "${toPersianWords(int.parse(_convertRialToToman(_favPrice)))}تومان":"" ,style: textTheme.bodyText2,),
+                              ),
+                              SizedBox(height: 8,)
                             ],
                           ),
                         ),
@@ -139,7 +160,9 @@ class SelectChargePageState extends State<SelectChargePage> {
 
   void _clickConfirm() {
     Navigator.of(context).push(PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => BillPage(),
+      pageBuilder: (context, animation, secondaryAnimation) => BillPage(
+        operatorIcon: operatorIcon,
+      ),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return child;
       },
@@ -150,6 +173,7 @@ class SelectChargePageState extends State<SelectChargePage> {
     return InkWell(
       onTap: () {
         setState(() {
+          _controller.price.value = chargeModel.toString();
           if (_selectedIndex != index)
             _selectedIndex = index;
           else
@@ -184,7 +208,7 @@ class SelectChargePageState extends State<SelectChargePage> {
           child: Align(
               alignment: Alignment.centerRight,
               child: Text(
-                chargeModel.toString() + " ریال",
+                "${_addCommaToNumbers(chargeModel.toString())} ریال",
                 style: _selectedIndex == index
                     ? textThemeOrange.bodyText2
                     : textTheme.bodyText2,
@@ -206,18 +230,27 @@ class SelectChargePageState extends State<SelectChargePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "09124168652",
+                      Get.find<DataController>().phoneNumber.value,
                       style: textThemeBlack.bodyText2,
                     ),
                     Text(
-                      AppStrings.mci,
+                      Get.find<DataController>().operator.value,
                       style: textTheme.bodyText2,
                     )
                   ],
                 )),
-            Expanded(
-                flex: 1, child: SvgPicture.asset("assets/mci_with_bg.svg")),
+            Expanded(flex: 1, child: SvgPicture.asset(operatorIcon)),
           ],
         ));
+  }
+
+  String _addCommaToNumbers(String price) {
+    RegExp reg = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
+    String Function(Match) mathFunc = (Match match) => '${match[1]},';
+    return price.replaceAllMapped(reg, mathFunc);
+  }
+  String _convertRialToToman(String rialPrice){
+    return rialPrice.substring(0, rialPrice.length - 1);
+
   }
 }

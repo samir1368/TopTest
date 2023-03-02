@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:top/core/utils/app_size.dart';
 
 import '../../theme/text_theme.dart';

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:top/core/utils/app_colors.dart';
 import 'package:top/core/utils/app_size.dart';
 
+import '../../controller/dataController.dart';
 import '../../theme/text_theme.dart';
 
 class TextFieldButton extends StatefulWidget {
@@ -23,24 +25,20 @@ class TextFieldButton extends StatefulWidget {
 
 class _TextFieldButtonState extends State<TextFieldButton> {
   final _phoneNumberController = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
-
-  @override
-  void initState() {
-    _focusNode.addListener(() {
-      setState(() {});
-    });
-  }
+  final _controller = Get.put(DataController());
 
   @override
   Widget build(BuildContext context) {
+    widget.showSuffix
+        ? _phoneNumberController.text =
+            Get.find<DataController>().phoneNumber.value
+        : null;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: TextField(
           controller: _phoneNumberController,
-          focusNode: _focusNode,
           textAlign: TextAlign.center,
           decoration: InputDecoration(
             focusedBorder: OutlineInputBorder(
@@ -68,17 +66,42 @@ class _TextFieldButtonState extends State<TextFieldButton> {
                       widget.showBottomSheet(true);
                     },
                   )
-                : null,
+                : Container(
+              width: 50,
+              padding: const EdgeInsets.only(left: 16.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "ریال",
+                  style: textTheme.caption,
+                ),
+              ),
+            ),
 
             counterText: '', // to hide length counter
           ),
+          onChanged: (value) {
+            if (widget.showSuffix)
+              _controller.phoneNumber.value = value.toString();
+            else {
+              _controller.price.value = value.toString();
+              widget.showBottomSheet(true);
+            }
+          },
           cursorColor: Color(0xFFADADAD),
           style: textThemeBlack.caption,
           keyboardType: TextInputType.number,
           autofocus: false,
-          maxLength: 11,
+          maxLength: widget.showSuffix? 11:7,
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _phoneNumberController.dispose();
+    super.dispose();
   }
 }

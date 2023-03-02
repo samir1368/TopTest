@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:top/core/utils/app_colors.dart';
 import 'package:top/core/utils/app_strings.dart';
 import 'package:top/core/widget/appbar.dart';
@@ -9,7 +10,9 @@ import 'package:top/features/selectCharge/page/select_charge_page.dart';
 import 'package:top/features/selectOperator/widget/select_number_operator_bottomsheet.dart';
 import 'package:top/theme/text_theme.dart';
 
+import '../../../controller/dataController.dart';
 import '../../../core/widget/confirm_button.dart';
+import '../model/choose_operator.dart';
 import '../model/operator_model.dart';
 
 class SelectOperator extends StatefulWidget {
@@ -22,7 +25,7 @@ class SelectOperator extends StatefulWidget {
 class SelectOperatorState extends State<SelectOperator> {
   late final List<OperatorModel> _operatorData = [];
   bool _showBottomSheet = false;
-
+  final _controller = Get.put(DataController());
   int _selectedIndex = -1;
 
   @override
@@ -44,7 +47,8 @@ class SelectOperatorState extends State<SelectOperator> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.main_bg,
-      appBar: FirstPageAppbar(context, AppStrings.buy, "assets/buy_credit_icon.svg"),
+      appBar: FirstPageAppbar(
+          context, AppStrings.buy, "assets/buy_credit_icon.svg"),
       resizeToAvoidBottomInset: false,
       body: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -133,6 +137,21 @@ class SelectOperatorState extends State<SelectOperator> {
   }
 
   _clickConfirm() {
+    if (Get.find<DataController>().phoneNumber.value.length < 11) {
+      final snackBar = SnackBar(
+        content: Text(
+          "شماره موبایل خود را به درستی وارد کنید",
+          style: textThemeWhite.bodyText2,
+          textAlign: TextAlign.end,
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      return;
+    }
+    if (Get.find<DataController>().operator.value == "")
+      _controller.operator.value =
+          ChooseOperator(Get.find<DataController>().phoneNumber.value);
     Navigator.of(context).push(PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
           SelectChargePage(),
@@ -140,6 +159,7 @@ class SelectOperatorState extends State<SelectOperator> {
         return child;
       },
     ));
+    // Get.to(const SelectChargePage());
   }
 
   void showBottomSheet(bool show) {
@@ -156,10 +176,12 @@ class SelectOperatorState extends State<SelectOperator> {
         child: InkWell(
           onTap: () {
             setState(() {
-              if (_selectedIndex != index)
+              if (_selectedIndex != index) {
+                _controller.operator.value = operatorModel.operatorName;
                 _selectedIndex = index;
-              else
+              } else {
                 _selectedIndex = -1;
+              }
             });
           },
           child: Padding(

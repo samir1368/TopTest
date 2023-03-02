@@ -1,18 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:top/controller/dataController.dart';
 import 'package:top/core/utils/app_colors.dart';
 import 'package:top/core/utils/app_strings.dart';
 import 'package:top/core/widget/appbar.dart';
-import 'package:top/core/widget/textfield_button.dart';
 import 'package:top/theme/text_theme.dart';
 import 'package:top/core/utils/app_size.dart';
 import '../../../core/widget/confirm_button.dart';
 
 /// This class is a StatefulWidget that shows information after paying your charge
 class BillPage extends StatefulWidget {
-  const BillPage({Key? key}) : super(key: key);
+  final String operatorIcon;
+  const BillPage({Key? key,required this.operatorIcon}) : super(key: key);
 
   @override
   BillPageState createState() => BillPageState();
@@ -20,6 +21,7 @@ class BillPage extends StatefulWidget {
 
 class BillPageState extends State<BillPage> {
   bool _switchValue = false;
+
   @override
   void initState() {
     super.initState();
@@ -30,7 +32,7 @@ class BillPageState extends State<BillPage> {
     return Scaffold(
       backgroundColor: AppColors.main_bg,
       resizeToAvoidBottomInset: false,
-      appBar: myAppbar(context, AppStrings.buy_mci, "assets/mci_light.svg"),
+      appBar: myAppbar(context, Get.find<DataController>().operator.value, widget.operatorIcon),
       body: Stack(
         children: [
           Container(
@@ -68,7 +70,7 @@ class BillPageState extends State<BillPage> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            _buildItem(AppStrings.phoneNumber, "0912416852"),
+                            _buildItem(AppStrings.phoneNumber,   Get.find<DataController>().phoneNumber.value),
                             Container(
                               width: double.infinity,
                               margin: const EdgeInsets.only(left: 8, right: 8),
@@ -77,7 +79,7 @@ class BillPageState extends State<BillPage> {
                                 color: AppColors.light_gray,
                               ),
                             ),
-                            _buildItem(AppStrings.amount, "2100ریال"),
+                            _buildItem(AppStrings.amount,   Get.find<DataController>().price.value+"ریال"),
                             Container(
                               width: double.infinity,
                               margin: const EdgeInsets.only(left: 8, right: 8),
@@ -87,7 +89,7 @@ class BillPageState extends State<BillPage> {
                               ),
                             ),
                             _buildItemAmount(
-                                AppStrings.finalAmount, "23 هزار ریال"),
+                                AppStrings.finalAmount,"${4} ریال"),
                           ],
                         ),
                       ),
@@ -239,12 +241,7 @@ class BillPageState extends State<BillPage> {
   }
 
   void _clickConfirm() {
-    Navigator.of(context).push(PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => const BillPage(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return child;
-      },
-    ));
+
   }
 
   _buildItem(String title, String message) {
@@ -273,9 +270,13 @@ class BillPageState extends State<BillPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              message,
-              style: textThemeBlack.bodyText2,
+            Directionality(
+              textDirection: TextDirection.ltr,
+              child: Text(
+                message,
+                style: textThemeBlack.bodyText2,
+                textAlign: TextAlign.end,
+              ),
             ),
             Text(
               title,
