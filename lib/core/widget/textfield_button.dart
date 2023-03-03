@@ -93,7 +93,7 @@ class _TextFieldButtonState extends State<TextFieldButton> {
             }
           },
           cursorColor: AppColors.cursor_color,
-          style: textThemeNumber.bodyText2,
+          style: textThemeBlackNumber.bodyText2,
           keyboardType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           autofocus: false,
