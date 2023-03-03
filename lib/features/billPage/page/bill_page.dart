@@ -92,8 +92,7 @@ class BillPageState extends State<BillPage> {
                                 color: AppColors.light_gray,
                               ),
                             ),
-                            _buildItemAmount(AppStrings.finalAmount,
-                                "${4}${AppStrings.rial}"),
+                            _buildItemAmount(AppStrings.finalAmount),
                           ],
                         ),
                       ),
@@ -273,7 +272,7 @@ class BillPageState extends State<BillPage> {
     );
   }
 
-  _buildItemAmount(String title, String message) {
+  _buildItemAmount(String title) {
     int realPrice = int.parse(Get.find<DataController>().price.value) + 1000;
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -289,7 +288,7 @@ class BillPageState extends State<BillPage> {
               ),
               Text(
                 "${realPrice}${AppStrings.rial}",
-                style: textThemeBlackNumber.bodyText2,
+                style: textThemeBlackNumber.subtitle1,
               ),
             ],
           )),
