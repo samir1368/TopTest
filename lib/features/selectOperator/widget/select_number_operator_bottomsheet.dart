@@ -156,12 +156,12 @@ class SelectNumberOperatorBottomSheet extends StatelessWidget {
         icon = "assets/mci_with_bg.svg";
         break;
       case 1:
-        phoneNumber = "09124168652";
+        phoneNumber = "09334168652";
         operator = AppStrings.irancel;
         icon = "assets/irancel_with_bg.svg";
         break;
       case 2:
-        phoneNumber = "09124168652";
+        phoneNumber = "09214168652";
         operator = AppStrings.rightel;
         icon = "assets/rightel_with_bg.svg";
         break;
