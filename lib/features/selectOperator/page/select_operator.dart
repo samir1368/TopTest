@@ -49,8 +49,15 @@ class SelectOperatorState extends State<SelectOperator> {
       resizeToAvoidBottomInset: false,
       body: WillPopScope(
         onWillPop: () async {
-          await SystemNavigator.pop();
-          return true;
+          if (_showBottomSheet) {
+            setState(() {
+              _showBottomSheet = false;
+            });
+            return false;
+          } else {
+            await SystemNavigator.pop();
+            return true;
+          }
         },
         child: Padding(
             padding: const EdgeInsets.all(AppSize.margin_8),
@@ -100,13 +107,13 @@ class SelectOperatorState extends State<SelectOperator> {
                                       style: textTheme.bodyText2,
                                       textDirection: TextDirection.rtl,
                                     ),
-                                   const SizedBox(
+                                    const SizedBox(
                                       width: AppSize.margin_8,
                                     ),
                                     SvgPicture.asset("assets/info.svg"),
                                   ],
                                 )),
-                           const SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             Directionality(
