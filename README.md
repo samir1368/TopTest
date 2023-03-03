@@ -5,10 +5,10 @@
 <br />
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="assets/images/app_launcher.png" alt="Logo" width="80" height="80">
+    <img src="assets/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">Fanly</h3>
+<h3 align="center">TopTask</h3>
 
   <p align="center">
  A summary of the Flutter project
@@ -30,7 +30,7 @@
 
 <!-- ABOUT THE PROJECT -->
 
-## About Fanly
+## About TopTask
 It's a simple task for Top company. In this program, the section for selecting the mobile phone number, the corresponding operator, 
 and the required amount for recharging the SIM card has been implemented.
 There is no connection to a server and only the UI of the program has been implemented.
