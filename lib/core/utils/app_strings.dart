@@ -1,6 +1,8 @@
 
 class AppStrings {
   static const String buy = "خرید شارژ";
+  static const String rial = "ریال";
+  static const String toman = "تومان";
   static const String buy_mci = "شارژ همراه اول";
 
   static const String mci = "همراه اول";
@@ -28,4 +30,9 @@ class AppStrings {
   static const String selectContact =    "انتخاب مخاطبین";
   static const String contactList =    "لیست مخاطبین";
   static const String continueByContactList =  "ادامه با لیست مخاطب ها";
+
+  static const String incorrectPhoneNumber = "شماره موبایل خود را به درستی وارد کنید";
+  static const String incorrectFormatPhoneNumber = "شماره موبایل وارد شده صحیح نمی باشد";
+  static const String choose_price = "مبلغ بسته خود را انتخاب کنید";
+  static const String finishMessage =  "پایان طراحی";
 }

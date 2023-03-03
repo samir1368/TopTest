@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:top/core/utils/app_colors.dart';
 import 'package:top/theme/text_theme.dart';
+import '../export_core.dart';
 
+/// It returns an AppBar with a title and a leading icon.
+///
+/// Args:
+///   context (BuildContext): The context of the page.
+///   title (String): The title of the appbar
+///   path (String): The path to the image you want to use as the background.
 AppBar myAppbar(BuildContext context, String title, String path) {
   return AppBar(
-    toolbarHeight: 60,
+    toolbarHeight: AppSize.toolbarHeight,
     elevation: 1,
     iconTheme: const IconThemeData(
       color: AppColors.gray, //change your color here
@@ -22,7 +28,7 @@ AppBar myAppbar(BuildContext context, String title, String path) {
     leading: IconButton(
       icon: SvgPicture.asset(
         "assets/support_icon.svg",
-        height: 25,
+        height: AppSize.iconSize_25,
       ),
       onPressed: () {},
     ),
@@ -38,16 +44,18 @@ AppBar myAppbar(BuildContext context, String title, String path) {
       ),
       SvgPicture.asset(
         path,
-        height: 25,
+        height: AppSize.iconSize_25,
       )
     ]),
     centerTitle: true,
     backgroundColor: AppColors.white,
   );
 }
-AppBar FirstPageAppbar(BuildContext context, String title, String path) {
+
+/// The same as `myAppbar` but it closes the app when the back button is pressed.
+AppBar firstPageAppbar(BuildContext context, String title, String path) {
   return AppBar(
-    toolbarHeight: 60,
+    toolbarHeight: AppSize.toolbarHeight,
     elevation: 1,
     iconTheme: const IconThemeData(
       color: AppColors.gray, //change your color here
@@ -55,7 +63,7 @@ AppBar FirstPageAppbar(BuildContext context, String title, String path) {
     actions: [
       IconButton(
         icon: SvgPicture.asset("assets/back_icon.svg"),
-        onPressed: ()async {
+        onPressed: () async {
           await SystemNavigator.pop();
         },
       )
@@ -63,7 +71,7 @@ AppBar FirstPageAppbar(BuildContext context, String title, String path) {
     leading: IconButton(
       icon: SvgPicture.asset(
         "assets/support_icon.svg",
-        height: 25,
+        height: AppSize.iconSize_25,
       ),
       onPressed: () {},
     ),
@@ -79,7 +87,7 @@ AppBar FirstPageAppbar(BuildContext context, String title, String path) {
       ),
       SvgPicture.asset(
         path,
-        height: 25,
+        height: AppSize.iconSize_25,
       )
     ]),
     centerTitle: true,

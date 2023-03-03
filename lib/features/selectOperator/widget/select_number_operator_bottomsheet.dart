@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-
 import '../../../controller/dataController.dart';
-import '../../../core/utils/app_colors.dart';
-import '../../../core/utils/app_strings.dart';
 import '../../../theme/text_theme.dart';
-
+import 'package:top/core/export_core.dart';
 class SelectNumberOperatorBottomSheet extends StatelessWidget {
   final ValueChanged<bool> showBottomSheet;
 
@@ -23,13 +20,13 @@ class SelectNumberOperatorBottomSheet extends StatelessWidget {
       },
       builder: (context) {
         return Container(
-          margin: EdgeInsets.only(top: 100),
-          padding: EdgeInsets.all(20),
+          margin:  EdgeInsets.only(top: AppSize.margin_100),
+          padding: EdgeInsets.all(AppSize.margin_20),
           decoration: const BoxDecoration(
               color: AppColors.main_bg,
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30),
-                topRight: Radius.circular(30),
+                topLeft: Radius.circular(AppSize.radiusBottomSheet),
+                topRight: Radius.circular(AppSize.radiusBottomSheet),
               )),
           width: double.infinity,
           child: Align(
@@ -62,7 +59,7 @@ class SelectNumberOperatorBottomSheet extends StatelessWidget {
                 Column(
                   children: [
                     Card(
-                      margin: EdgeInsets.all(10),
+                      margin: EdgeInsets.all(AppSize.margin_10),
                       color: AppColors.white,
                       shadowColor: Colors.blueGrey,
                       elevation: 8,
@@ -91,7 +88,7 @@ class SelectNumberOperatorBottomSheet extends StatelessWidget {
                               Expanded(
                                   flex: 1,
                                   child: Padding(
-                                    padding: const EdgeInsets.all(4.0),
+                                    padding: const EdgeInsets.all(AppSize.margin_8),
                                     child: Stack(
                                       alignment: Alignment.centerRight,
                                       children: [
@@ -121,7 +118,7 @@ class SelectNumberOperatorBottomSheet extends StatelessWidget {
                 ),
                 Expanded(
                   child: Card(
-                    margin: EdgeInsets.all(10),
+                    margin: EdgeInsets.all(AppSize.margin_10),
                     color: AppColors.white,
                     shadowColor: Colors.blueGrey,
                     elevation: 8,
@@ -177,7 +174,7 @@ class SelectNumberOperatorBottomSheet extends StatelessWidget {
 
       },
       child: Container(
-          padding: EdgeInsets.all(8),
+          padding: EdgeInsets.all(AppSize.margin_8),
           child: Row(
             children: [
               Expanded(
@@ -190,7 +187,7 @@ class SelectNumberOperatorBottomSheet extends StatelessWidget {
                     children: [
                       Text(
                         phoneNumber,
-                        style: textTheme.bodyText2,
+                        style: textThemeNumber.bodyText2,
                       ),
                       Text(
                         operator,

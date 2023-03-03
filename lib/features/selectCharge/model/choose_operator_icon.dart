@@ -1,11 +1,10 @@
 
 import 'package:get/get.dart';
-import 'package:top/core/utils/app_strings.dart';
-
 import '../../../controller/dataController.dart';
+import '../../../core/export_core.dart';
 
 
-String ChooseOperatorIcon(String phoneNumber){
+String chooseOperatorIcon(String phoneNumber){
 
   String operatorIcon ="";
   String operatorName =Get.find<DataController>().operator.value;
@@ -24,7 +23,7 @@ String ChooseOperatorIcon(String phoneNumber){
         operatorIcon ="assets/shatel_sim_light.svg";
         break;
       case AppStrings.aptel:
-        operatorIcon ="assets/apptel_sim_light.svg";
+        operatorIcon ="assets/aptel_sim_light.svg";
         break;
       default :
         operatorIcon ="assets/mci_with_bg.svg";
@@ -46,14 +45,12 @@ String ChooseOperatorIcon(String phoneNumber){
         operatorIcon ="assets/shatel_sim_light.svg";
         break;
       case "0999" :
-        operatorIcon ="assets/apptel_sim_light.svg";
+        operatorIcon ="assets/aptel_sim_light.svg";
         break;
       default :
         operatorIcon ="assets/mci_with_bg.svg";
         break;
     }
   }
-
-
   return operatorIcon;
 }

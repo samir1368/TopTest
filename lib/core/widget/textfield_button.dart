@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:top/core/utils/app_colors.dart';
 import 'package:top/core/utils/app_size.dart';
+import 'package:top/core/utils/app_strings.dart';
 
 import '../../controller/dataController.dart';
 import '../../theme/text_theme.dart';
 
+
+/// `TextFieldButton` is a stateful widget that displays a text field
 class TextFieldButton extends StatefulWidget {
-  final ValueChanged<bool> showBottomSheet;
-  final bool showSuffix;
+  final ValueChanged<bool> changeListenerFunction;
+  final bool showSuffixIcon;
   final String hintMessage;
 
   const TextFieldButton(
       {Key? key,
-      required this.showBottomSheet,
-      required this.showSuffix,
+      required this.changeListenerFunction,
+      required this.showSuffixIcon,
       required this.hintMessage})
       : super(key: key);
 
@@ -29,12 +33,12 @@ class _TextFieldButtonState extends State<TextFieldButton> {
 
   @override
   Widget build(BuildContext context) {
-    widget.showSuffix
+    widget.showSuffixIcon
         ? _phoneNumberController.text =
             Get.find<DataController>().phoneNumber.value
         : null;
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(AppSize.margin_8),
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: TextField(
@@ -44,55 +48,56 @@ class _TextFieldButtonState extends State<TextFieldButton> {
             focusedBorder: OutlineInputBorder(
               borderSide:
                   const BorderSide(color: AppColors.darkOrange, width: 1.0),
-              borderRadius: BorderRadius.circular(AppSize.radiusConfirmButton),
+              borderRadius: BorderRadius.circular(AppSize.radiusButton),
             ),
             enabledBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: AppColors.gray, width: 1.0),
-              borderRadius: BorderRadius.circular(AppSize.radiusConfirmButton),
+              borderRadius: BorderRadius.circular(AppSize.radiusButton),
             ),
-            hintStyle: textTheme.bodyText2,
+            hintStyle: textThemeNumber.bodyText2,
             // color of hint
             hintText: widget.hintMessage,
 
-            suffixIcon: widget.showSuffix
+            suffixIcon: widget.showSuffixIcon
                 ? IconButton(
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.all(AppSize.margin_10),
                     icon: SvgPicture.asset(
                       "assets/contact_icon.svg",
-                      width: 20,
-                      height: 20,
+                      width: AppSize.iconSize_25,
+                      height: AppSize.iconSize_25,
                     ),
                     onPressed: () {
-                      widget.showBottomSheet(true);
+                      widget.changeListenerFunction(true);
                     },
                   )
                 : Container(
-              width: 50,
-              padding: const EdgeInsets.only(left: 16.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "ریال",
-                  style: textTheme.caption,
-                ),
-              ),
-            ),
+                    width: AppSize.heightButton,
+                    padding: const EdgeInsets.only(left: AppSize.margin_16),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        AppStrings.rial,
+                        style: textThemeNumber.caption,
+                      ),
+                    ),
+                  ),
 
             counterText: '', // to hide length counter
           ),
           onChanged: (value) {
-            if (widget.showSuffix)
+            if (widget.showSuffixIcon) {
               _controller.phoneNumber.value = value.toString();
-            else {
+            } else {
               _controller.price.value = value.toString();
-              widget.showBottomSheet(true);
+              widget.changeListenerFunction(true);
             }
           },
-          cursorColor: Color(0xFFADADAD),
-          style: textThemeBlack.caption,
+          cursorColor: AppColors.cursor_color,
+          style: textThemeNumber.bodyText2,
           keyboardType: TextInputType.number,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           autofocus: false,
-          maxLength: widget.showSuffix? 11:7,
+          maxLength: widget.showSuffixIcon ? 11 : 7,
         ),
       ),
     );

@@ -2,18 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:top/core/utils/app_colors.dart';
-import 'package:top/core/utils/app_strings.dart';
-import 'package:top/core/widget/appbar.dart';
-import 'package:top/core/widget/textfield_button.dart';
 import 'package:top/features/billPage/page/bill_page.dart';
 import 'package:top/theme/text_theme.dart';
-import 'package:top/core/utils/app_size.dart';
 import '../../../controller/dataController.dart';
-import '../../../core/widget/confirm_button.dart';
 import '../model/choose_operator_icon.dart';
 import '../model/convert_digit_to_letter.dart';
+import 'package:top/core/export_core.dart';
 
+/// This class is a stateful widget that user can select a price
 class SelectChargePage extends StatefulWidget {
   const SelectChargePage({Key? key}) : super(key: key);
 
@@ -26,7 +22,8 @@ class SelectChargePageState extends State<SelectChargePage> {
   int _selectedIndex = -1;
   final _controller = Get.put(DataController());
   String operatorIcon = "";
-  String _favPrice= "";
+  String _favPrice = "";
+
   @override
   void initState() {
     super.initState();
@@ -36,7 +33,7 @@ class SelectChargePageState extends State<SelectChargePage> {
     _chargeData.add(7000);
     _chargeData.add(1000);
     operatorIcon =
-        ChooseOperatorIcon(Get.find<DataController>().phoneNumber.value);
+        chooseOperatorIcon(Get.find<DataController>().phoneNumber.value);
   }
 
   @override
@@ -54,7 +51,7 @@ class SelectChargePageState extends State<SelectChargePage> {
               width: double.infinity,
               color: AppColors.main_bg,
               alignment: Alignment.topCenter,
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.all(AppSize.margin_10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -68,20 +65,20 @@ class SelectChargePageState extends State<SelectChargePage> {
                         textDirection: TextDirection.rtl,
                       ),
                       Card(
-                        margin: EdgeInsets.all(10),
+                        margin: EdgeInsets.all(AppSize.margin_10),
                         color: AppColors.white,
                         shadowColor: Colors.blueGrey,
                         elevation: 8,
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(AppSize.margin_8),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              _phoneNumber(),
+                              _phoneNumberRow(),
                               Container(
                                 width: double.infinity,
-                                margin: const EdgeInsets.all(10),
+                                margin: const EdgeInsets.all(AppSize.margin_10),
                                 child: const Divider(
                                   thickness: 1,
                                   color: AppColors.light_gray,
@@ -101,7 +98,7 @@ class SelectChargePageState extends State<SelectChargePage> {
                                   ],
                                 ),
                               ),
-                              SizedBox(
+                              const  SizedBox(
                                 height: 20,
                               ),
                               Text(
@@ -110,23 +107,30 @@ class SelectChargePageState extends State<SelectChargePage> {
                                 textDirection: TextDirection.rtl,
                               ),
                               TextFieldButton(
-                                showBottomSheet: (_) {
-                                  setState((){
-                                    _favPrice = Get.find<DataController>().price.value;
+                                changeListenerFunction: (_) {
+                                  setState(() {
+                                    _favPrice =
+                                        Get.find<DataController>().price.value;
+                                    _selectedIndex = -1;
                                   });
-
                                 },
-                                showSuffix: false,
+                                showSuffixIcon: false,
                                 hintMessage: AppStrings.amount,
                               ),
-                              SizedBox(
+                              const  SizedBox(
                                 height: 10,
                               ),
                               Center(
                                 child: Text(
-                                    _favPrice.length>1? "${toPersianWords(int.parse(_convertRialToToman(_favPrice)))}تومان":"" ,style: textTheme.bodyText2,),
+                                  _favPrice.length > 1
+                                      ? "${toPersianWords(int.parse(_convertRialToToman(_favPrice)))}${AppStrings.toman}"
+                                      : "",
+                                  style: textThemeNumber.bodyText2,
+                                ),
                               ),
-                              SizedBox(height: 8,)
+                              const SizedBox(
+                                height: 8,
+                              )
                             ],
                           ),
                         ),
@@ -140,14 +144,13 @@ class SelectChargePageState extends State<SelectChargePage> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              margin: EdgeInsets.all(15),
-              height: AppSize.heightConfirmButton,
+              margin: EdgeInsets.all(AppSize.margin_16),
+              height: AppSize.heightButton,
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: MyConfirmButton(
                   txt: AppStrings.confirm,
                   color: AppColors.lightOrange,
-                  txtColorWhite: true,
                   clickConfirm: _clickConfirm,
                 ),
               ),
@@ -159,14 +162,15 @@ class SelectChargePageState extends State<SelectChargePage> {
   }
 
   void _clickConfirm() {
-    Navigator.of(context).push(PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => BillPage(
+    if (Get.find<DataController>().price.value.isEmpty) {
+      appSnackbar(context, AppStrings.choose_price);
+      return;
+    }
+    Get.to(
+      () => BillPage(
         operatorIcon: operatorIcon,
       ),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return child;
-      },
-    ));
+    );
   }
 
   Widget _buildWidgetItem(int chargeModel, BuildContext context, int index) {
@@ -180,47 +184,45 @@ class SelectChargePageState extends State<SelectChargePage> {
             _selectedIndex = -1;
         });
       },
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          padding: EdgeInsets.all(8),
-          decoration: _selectedIndex == index
-              ? BoxDecoration(
-                  color: AppColors.bg_orange,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                  border: Border.all(
-                    color: AppColors.lightOrange,
-                    width: 1,
-                  ),
-                )
-              : BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                  border: Border.all(
-                    color: AppColors.gray,
-                    width: 1,
-                  ),
+      child: Container(
+        padding: EdgeInsets.all(AppSize.margin_16),
+        margin: EdgeInsets.all(4),
+        decoration: _selectedIndex == index
+            ? BoxDecoration(
+                color: AppColors.bg_orange,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(AppSize.radiusButton),
                 ),
-          child: Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                "${_addCommaToNumbers(chargeModel.toString())} ریال",
-                style: _selectedIndex == index
-                    ? textThemeOrange.bodyText2
-                    : textTheme.bodyText2,
-              )),
-        ),
+                border: Border.all(
+                  color: AppColors.lightOrange,
+                  width: 1,
+                ),
+              )
+            : BoxDecoration(
+                color: AppColors.white,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(AppSize.radiusButton),
+                ),
+                border: Border.all(
+                  color: AppColors.gray,
+                  width: 1,
+                ),
+              ),
+        child: Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              "${_addCommaToNumbers(chargeModel.toString())} ${AppStrings.rial}",
+              style: _selectedIndex == index
+                  ? textThemeOrangeNumber.bodyText2
+                  : textThemeNumber.bodyText2,
+            )),
       ),
     );
   }
 
-  _phoneNumber() {
+  _phoneNumberRow() {
     return Container(
-        padding: EdgeInsets.all(8),
+        padding: EdgeInsets.all(AppSize.margin_8),
         child: Row(
           children: [
             Expanded(
@@ -231,7 +233,7 @@ class SelectChargePageState extends State<SelectChargePage> {
                   children: [
                     Text(
                       Get.find<DataController>().phoneNumber.value,
-                      style: textThemeBlack.bodyText2,
+                      style: textThemeBlackNumber.bodyText2,
                     ),
                     Text(
                       Get.find<DataController>().operator.value,
@@ -249,8 +251,8 @@ class SelectChargePageState extends State<SelectChargePage> {
     String Function(Match) mathFunc = (Match match) => '${match[1]},';
     return price.replaceAllMapped(reg, mathFunc);
   }
-  String _convertRialToToman(String rialPrice){
-    return rialPrice.substring(0, rialPrice.length - 1);
 
+  String _convertRialToToman(String rialPrice) {
+    return rialPrice.substring(0, rialPrice.length - 1);
   }
 }

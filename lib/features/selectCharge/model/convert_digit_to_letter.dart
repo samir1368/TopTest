@@ -1,4 +1,8 @@
 
+/// It takes an integer and returns a string
+///
+/// Args:
+///   number (int): The number you want to convert to Persian words.
 String toPersianWords(int number) {
   final Map<int, String> persianNumbers = {
     0: 'صفر',
@@ -57,18 +61,18 @@ String toPersianWords(int number) {
 
         if (quotient >= 100) {
           int hundreds = quotient ~/ 100;
-          current += persianNumbers[hundreds * 100]! + ' ';
+          current += '${persianNumbers[hundreds * 100]!} ';
           quotient %= 100;
         }
 
         if (quotient >= 20) {
           int tens = quotient ~/ 10;
-          current += (persianNumbers[tens * 10]! + ' ');
+          current += ('${persianNumbers[tens * 10]!} ');
           quotient %= 10;
         }
 
         if (quotient > 0) {
-          current += persianNumbers[quotient]! + ' ';
+          current += '${persianNumbers[quotient]!} ';
         }
 
         current += words[i];
@@ -83,6 +87,5 @@ String toPersianWords(int number) {
       number = remainder;
     }
   }
-
   return result;
 }

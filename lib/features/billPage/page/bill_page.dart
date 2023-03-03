@@ -3,17 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:top/controller/dataController.dart';
-import 'package:top/core/utils/app_colors.dart';
-import 'package:top/core/utils/app_strings.dart';
-import 'package:top/core/widget/appbar.dart';
 import 'package:top/theme/text_theme.dart';
-import 'package:top/core/utils/app_size.dart';
-import '../../../core/widget/confirm_button.dart';
+import 'package:top/core/export_core.dart';
 
 /// This class is a StatefulWidget that shows information after paying your charge
 class BillPage extends StatefulWidget {
   final String operatorIcon;
-  const BillPage({Key? key,required this.operatorIcon}) : super(key: key);
+
+  const BillPage({Key? key, required this.operatorIcon}) : super(key: key);
 
   @override
   BillPageState createState() => BillPageState();
@@ -32,13 +29,14 @@ class BillPageState extends State<BillPage> {
     return Scaffold(
       backgroundColor: AppColors.main_bg,
       resizeToAvoidBottomInset: false,
-      appBar: myAppbar(context, Get.find<DataController>().operator.value, widget.operatorIcon),
+      appBar: myAppbar(context, Get.find<DataController>().operator.value,
+          widget.operatorIcon),
       body: Stack(
         children: [
           Container(
             height: MediaQuery.of(context).size.height,
             width: double.infinity,
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(AppSize.margin_16),
             child: SizedBox(
               height: MediaQuery.of(context).size.height,
               child: Column(
@@ -63,33 +61,39 @@ class BillPageState extends State<BillPage> {
                         shape: const RoundedRectangleBorder(
                             side: BorderSide(color: AppColors.white, width: 1),
                             borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
+                              topLeft: Radius.circular(AppSize.radiusButton),
+                              topRight: Radius.circular(AppSize.radiusButton),
                             )),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            _buildItem(AppStrings.phoneNumber,   Get.find<DataController>().phoneNumber.value),
+                            _buildItem(AppStrings.phoneNumber,
+                                Get.find<DataController>().phoneNumber.value),
                             Container(
                               width: double.infinity,
-                              margin: const EdgeInsets.only(left: 8, right: 8),
+                              margin: const EdgeInsets.only(
+                                  left: AppSize.margin_8,
+                                  right: AppSize.margin_8),
                               child: const Divider(
                                 thickness: 1,
                                 color: AppColors.light_gray,
                               ),
                             ),
-                            _buildItem(AppStrings.amount,   Get.find<DataController>().price.value+"ریال"),
+                            _buildItem(AppStrings.amount,
+                                "${Get.find<DataController>().price.value}${AppStrings.rial}"),
                             Container(
                               width: double.infinity,
-                              margin: const EdgeInsets.only(left: 8, right: 8),
+                              margin: const EdgeInsets.only(
+                                  left: AppSize.margin_8,
+                                  right: AppSize.margin_8),
                               child: const Divider(
                                 thickness: 1,
                                 color: AppColors.light_gray,
                               ),
                             ),
-                            _buildItemAmount(
-                                AppStrings.finalAmount,"${4} ریال"),
+                            _buildItemAmount(AppStrings.finalAmount,
+                                "${4}${AppStrings.rial}"),
                           ],
                         ),
                       ),
@@ -104,8 +108,10 @@ class BillPageState extends State<BillPage> {
                               side:
                                   BorderSide(color: AppColors.white, width: 1),
                               borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10),
+                                bottomLeft:
+                                    Radius.circular(AppSize.radiusButton),
+                                bottomRight:
+                                    Radius.circular(AppSize.radiusButton),
                               )),
                           child: _buildItemSwitch()),
                     ],
@@ -119,22 +125,22 @@ class BillPageState extends State<BillPage> {
                         textDirection: TextDirection.rtl,
                       ),
                       Container(
-                          margin: const EdgeInsets.only(top: 10),
-                          padding: const EdgeInsets.all(5),
+                          margin: const EdgeInsets.only(top: AppSize.margin_10),
+                          padding: const EdgeInsets.all(AppSize.margin_8),
                           decoration: const BoxDecoration(
                               color: AppColors.light_gray,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0))),
+                              borderRadius: BorderRadius.all(
+                                  Radius.circular(AppSize.radiusButton))),
                           width: double.infinity,
                           child: Row(
                             children: [
                               Expanded(
                                   flex: 1,
                                   child: Container(
-                                    height: 50,
+                                    height: AppSize.heightButton,
                                     child: Center(
                                         child: Text(
-                                     AppStrings.wallet,
+                                      AppStrings.wallet,
                                       style: textTheme.bodyText2,
                                     )),
                                   )),
@@ -144,14 +150,15 @@ class BillPageState extends State<BillPage> {
                               Expanded(
                                   flex: 1,
                                   child: Container(
-                                    height: 50,
+                                    height: AppSize.heightButton,
                                     decoration: const BoxDecoration(
                                         color: AppColors.white,
                                         borderRadius: BorderRadius.all(
-                                            Radius.circular(10.0))),
+                                            Radius.circular(
+                                                AppSize.radiusButton))),
                                     child: Center(
                                       child: Text(
-                                       AppStrings.card,
+                                        AppStrings.card,
                                         style: textThemeOrange.bodyText2,
                                       ),
                                     ),
@@ -167,19 +174,19 @@ class BillPageState extends State<BillPage> {
                         textDirection: TextDirection.rtl,
                       ),
                       Container(
-                          margin: const EdgeInsets.only(top: 10),
-                          padding: const EdgeInsets.all(5),
+                          margin: const EdgeInsets.only(top: AppSize.margin_10),
+                          padding: const EdgeInsets.all(AppSize.margin_8),
                           decoration: const BoxDecoration(
                               color: AppColors.white,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0))),
+                              borderRadius: BorderRadius.all(
+                                  Radius.circular(AppSize.radiusButton))),
                           width: double.infinity,
                           child: Row(
                             children: [
                               Expanded(
                                   flex: 1,
                                   child: SizedBox(
-                                    height: 50,
+                                    height: AppSize.heightButton,
                                     child: Center(
                                         child: RotatedBox(
                                             quarterTurns: 3,
@@ -189,7 +196,7 @@ class BillPageState extends State<BillPage> {
                               Expanded(
                                   flex: 4,
                                   child: SizedBox(
-                                    height: 50,
+                                    height: AppSize.heightButton,
                                     child: Center(
                                         child: Text(
                                       AppStrings.select,
@@ -199,11 +206,12 @@ class BillPageState extends State<BillPage> {
                               Expanded(
                                   flex: 1,
                                   child: Container(
-                                    height: 50,
+                                    height: AppSize.heightButton,
                                     decoration: const BoxDecoration(
                                         color: AppColors.bg_orange,
                                         borderRadius: BorderRadius.all(
-                                            Radius.circular(10.0))),
+                                            Radius.circular(
+                                                AppSize.radiusButton))),
                                     child: Stack(
                                       children: [
                                         Center(
@@ -218,13 +226,12 @@ class BillPageState extends State<BillPage> {
                         height: 10,
                       ),
                       SizedBox(
-                        height: AppSize.heightConfirmButton,
+                        height: AppSize.heightButton,
                         child: Align(
                           alignment: Alignment.bottomCenter,
                           child: MyConfirmButton(
                             txt: AppStrings.payByCard,
                             color: AppColors.bg_unselected,
-                            txtColorWhite: true,
                             clickConfirm: _clickConfirm,
                           ),
                         ),
@@ -241,54 +248,57 @@ class BillPageState extends State<BillPage> {
   }
 
   void _clickConfirm() {
-
+    appSnackbar(context, AppStrings.finishMessage);
   }
 
   _buildItem(String title, String message) {
-    return Container(
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              message,
-              style: textTheme.bodyText2,
-            ),
-            Text(
-              title,
-              style: textTheme.bodyText2,
-            ),
-          ],
-        ));
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Container(
+          padding: const EdgeInsets.all(AppSize.margin_10),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: textTheme.bodyText2,
+              ),
+              Text(
+                message,
+                style: textThemeNumber.bodyText2,
+              ),
+            ],
+          )),
+    );
   }
 
   _buildItemAmount(String title, String message) {
-    return Container(
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Directionality(
-              textDirection: TextDirection.ltr,
-              child: Text(
-                message,
+    int realPrice = int.parse(Get.find<DataController>().price.value) + 1000;
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Container(
+          padding: const EdgeInsets.all(AppSize.margin_10),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
                 style: textThemeBlack.bodyText2,
-                textAlign: TextAlign.end,
               ),
-            ),
-            Text(
-              title,
-              style: textThemeBlack.bodyText2,
-            ),
-          ],
-        ));
+              Text(
+                "${realPrice}${AppStrings.rial}",
+                style: textThemeBlackNumber.bodyText2,
+              ),
+            ],
+          )),
+    );
   }
 
   _buildItemSwitch() {
     return Container(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(AppSize.margin_8),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -306,7 +316,7 @@ class BillPageState extends State<BillPage> {
               ),
             ),
             Text(
-            AppStrings.saveMobilePhone,
+              AppStrings.saveMobilePhone,
               style: textTheme.bodyText2,
             ),
           ],

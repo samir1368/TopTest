@@ -14,4 +14,5 @@ class AppColors {
   static const background_bottomsheet = Color(0xFFB72B2B);
   static const blue = Color(0x5952C5CC);
   static const dark_blue = Color(0xFF2F8F94);
+  static const cursor_color =  Color(0xFFADADAD);
 }
